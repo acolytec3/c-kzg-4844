@@ -27,7 +27,7 @@ ifeq ($(PLATFORM),Windows)
 	CC = gcc
 	CFLAGS += -D_CRT_SECURE_NO_WARNINGS
 else
-	CC = clang
+	CC = emcc
 	CFLAGS += -fPIC -Werror
 endif
 
