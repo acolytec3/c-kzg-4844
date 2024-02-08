@@ -1755,6 +1755,10 @@ out_success:
     return ret;
 }
 
+void print_hello() {
+    printf("in a new method\n");
+}
+
 /**
  * Load trusted setup from a file.
  *
@@ -1768,35 +1772,61 @@ out_success:
  * @param[out] out Pointer to the loaded trusted setup data
  * @param[in]  in  File handle for input
  */
-C_KZG_RET load_trusted_setup_file(KZGSettings *out, FILE *in) {
-    int num_matches;
+void load_trusted_setup_file() {
+
+}
+
+void loadfile2() {
+    printf("init kzgsettings\n");
+    printf("kzgsettings is %ld elements\n", sizeof(KZGSettings));
+    KZGSettings *out = (KZGSettings*)malloc(sizeof(KZGSettings));
+    
+    FILE *in = fopen("trusted_setup.txt", "rb");
+    printf("hello world\n");
+    int num_matches = 0;
     uint64_t i;
-    uint8_t g1_bytes[TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1];
-    uint8_t g2_bytes[TRUSTED_SETUP_NUM_G2_POINTS * BYTES_PER_G2];
+    //uint8_t g1_bytes[TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1];
+    //uint8_t g2_bytes[TRUSTED_SETUP_NUM_G2_POINTS * BYTES_PER_G2];
+
+    int g1size = TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1;
+    uint8_t *g1_bytes = (uint8_t*)malloc(g1size * sizeof(uint8_t));
+
+    int g2size = TRUSTED_SETUP_NUM_G2_POINTS * BYTES_PER_G2;
+    uint8_t *g2_bytes = (uint8_t*)malloc(g2size * sizeof(uint8_t));
+
 
     /* Read the number of g1 points */
     num_matches = fscanf(in, "%" SCNu64, &i);
-    CHECK(num_matches == 1);
-    CHECK(i == TRUSTED_SETUP_NUM_G1_POINTS);
+
+    printf("%ld", sizeof(g1_bytes));
+    printf("%ld", sizeof(g2_bytes));
+    printf("%ld", sizeof(out));
+
+
+    printf("%d", num_matches);
 
     /* Read the number of g2 points */
     num_matches = fscanf(in, "%" SCNu64, &i);
-    CHECK(num_matches == 1);
-    CHECK(i == TRUSTED_SETUP_NUM_G2_POINTS);
+
+    printf("read numg2points\n");
+
 
     /* Read all of the g1 points, byte by byte */
+    printf("g1size thing %d\n", TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1);
     for (i = 0; i < TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1; i++) {
+        //printf("%lld\n", i);
         num_matches = fscanf(in, "%2hhx", &g1_bytes[i]);
-        CHECK(num_matches == 1);
+
     }
 
     /* Read all of the g2 points, byte by byte */
     for (i = 0; i < TRUSTED_SETUP_NUM_G2_POINTS * BYTES_PER_G2; i++) {
         num_matches = fscanf(in, "%2hhx", &g2_bytes[i]);
-        CHECK(num_matches == 1);
     }
 
-    return load_trusted_setup(
+    printf("%d", num_matches);
+
+    load_trusted_setup(
         out,
         g1_bytes,
         TRUSTED_SETUP_NUM_G1_POINTS,
@@ -1805,11 +1835,13 @@ C_KZG_RET load_trusted_setup_file(KZGSettings *out, FILE *in) {
     );
 }
 
-C_KZG_RET load_trusted_setup_file_from_wasm(KZGSettings *out) {
-    FILE *file = fopen("trusted_setup.txt", "rb");
-
-    return load_trusted_setup_file(
-        out,
-        file
-    );
+void load_trusted_setup_file_from_wasm() {
+    printf("LOADF\n");
+    print_hello();
+    printf("WORKS\n");
+    uint8_t g1_bytes[TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1];
+    uint8_t g2_bytes[TRUSTED_SETUP_NUM_G2_POINTS * BYTES_PER_G2];
+    printf("%ld", sizeof(g1_bytes));
+    printf("%ld", sizeof(g2_bytes));
+    loadfile2();
 }

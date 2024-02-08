@@ -131,7 +131,7 @@ C_KZG_RET load_trusted_setup(
     size_t n2
 );
 
-C_KZG_RET load_trusted_setup_file(KZGSettings *out, FILE *in);
+void load_trusted_setup_file();
 
 void free_trusted_setup(KZGSettings *s);
 
@@ -180,7 +180,7 @@ C_KZG_RET verify_blob_kzg_proof_batch(
     const KZGSettings *s
 );
 
-C_KZG_RET load_trusted_setup_file_from_wasm(KZGSettings *out) ;
+void load_trusted_setup_file_from_wasm() ;
 
 #ifdef __cplusplus
 }
