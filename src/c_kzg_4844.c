@@ -1771,8 +1771,11 @@ out_success:
 C_KZG_RET load_trusted_setup_file(KZGSettings *out, FILE *in) {
     int num_matches;
     uint64_t i;
-    uint8_t g1_bytes[TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1];
-    uint8_t g2_bytes[TRUSTED_SETUP_NUM_G2_POINTS * BYTES_PER_G2];
+
+    int g1size = TRUSTED_SETUP_NUM_G1_POINTS * BYTES_PER_G1;
+    uint8_t *g1_bytes = (uint8_t*)malloc(g1size * sizeof(uint8_t));
+    int g2size = TRUSTED_SETUP_NUM_G2_POINTS * BYTES_PER_G2;
+    uint8_t *g2_bytes = (uint8_t*)malloc(g2size * sizeof(uint8_t));
 
     /* Read the number of g1 points */
     num_matches = fscanf(in, "%" SCNu64, &i);
