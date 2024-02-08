@@ -180,7 +180,7 @@ C_KZG_RET verify_blob_kzg_proof_batch(
     const KZGSettings *s
 );
 
-C_KZG_RET load_trusted_setup_file_from_wasm(KZGSettings *out) ;
+C_KZG_RET load_trusted_setup_file_from_wasm();
 
 #ifdef __cplusplus
 }
