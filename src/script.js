@@ -7,6 +7,7 @@ const BYTES_PER_FIELD_ELEMENT = 4096
 const FIELD_ELEMENTS_PER_BLOB = 32
 const BYTES_PER_BLOB = BYTES_PER_FIELD_ELEMENT * FIELD_ELEMENTS_PER_BLOB
 const trustedSetupPath = './trusted_setup.json'
+// const trustedSetupPath = './trusted_setup.txt'
 function generateRandomBlob() {
     return new Uint8Array(
       randomBytes(BYTES_PER_BLOB).map((x, i) => {
@@ -28,12 +29,13 @@ function generateRandomBlob() {
   }
   
 kzg().then(module => {
+   // FS.readFile('trusted_setup.txt')
     const fileData = JSON.parse(fs.readFileSync(trustedSetupPath, { encoding: 'utf-8'}))
     const g1 = bytesFromHex(fileData.g1)
     const g2 = bytesFromHex(fileData.g2)
-    const loadTrustedSetup = module.cwrap('load_trusted_setup','number', ['number','array', 'number', 'array', 'number' ] )
-    console.log(g1.byteLength)
-    const ret = loadTrustedSetup(0, g1, 4096, g2, 65)
+    const loadTrustedSetup = module.cwrap('load_trusted_setup_file_from_wasm','number', ['number'] )
+    const ret = loadTrustedSetup(0)
+    //const fileData = fs.readFileSync(trustedSetupPath, { encoding: 'utf8'})
     console.log(ret)
     const blob = generateRandomBlob()
   //  const commitment = module._blob_to_kzg_commitment(blob)

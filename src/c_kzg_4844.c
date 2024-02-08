@@ -1804,3 +1804,12 @@ C_KZG_RET load_trusted_setup_file(KZGSettings *out, FILE *in) {
         TRUSTED_SETUP_NUM_G2_POINTS
     );
 }
+
+C_KZG_RET load_trusted_setup_file_from_wasm(KZGSettings *out) {
+    FILE *file = fopen("trusted_setup.txt", "rb");
+
+    return load_trusted_setup_file(
+        out,
+        file
+    );
+}
