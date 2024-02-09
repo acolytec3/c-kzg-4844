@@ -29,15 +29,11 @@ function generateRandomBlob() {
   }
   
 kzg().then(module => {
-   // FS.readFile('trusted_setup.txt')
-    const fileData = JSON.parse(fs.readFileSync(trustedSetupPath, { encoding: 'utf-8'}))
-    const g1 = bytesFromHex(fileData.g1)
-    const g2 = bytesFromHex(fileData.g2)
+
     const loadTrustedSetup = module.cwrap('load_trusted_setup_file_from_wasm', null,[] )
     const ret = loadTrustedSetup()
-    //const fileData = fs.readFileSync(trustedSetupPath, { encoding: 'utf8'})
     console.log(ret)
     const blob = generateRandomBlob()
-  //  const commitment = module._blob_to_kzg_commitment(blob)
-  //  console.log(commitment)
+    const commitment = module._blob_to_kzg_commitment(blob, blob)
+    console.log(commitment)
 })
