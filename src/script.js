@@ -6,8 +6,7 @@ const MAX_TOP_BYTE = 114;
 const BYTES_PER_FIELD_ELEMENT = 4096
 const FIELD_ELEMENTS_PER_BLOB = 32
 const BYTES_PER_BLOB = BYTES_PER_FIELD_ELEMENT * FIELD_ELEMENTS_PER_BLOB
-const trustedSetupPath = './trusted_setup.json'
-// const trustedSetupPath = './trusted_setup.txt'
+
 function generateRandomBlob() {
     return new Uint8Array(
       randomBytes(BYTES_PER_BLOB).map((x, i) => {
@@ -31,9 +30,9 @@ function generateRandomBlob() {
 kzg().then(module => {
 
     const loadTrustedSetup = module.cwrap('load_trusted_setup_file_from_wasm', null,[] )
-    const ret = loadTrustedSetup()
-    console.log(ret)
+    const blobToKzgCommit = module.cwrap('blob_to_kzg_commitment_wasm', 'string',['array'] )
+    loadTrustedSetup()
     const blob = generateRandomBlob()
-    const commitment = module._blob_to_kzg_commitment(blob, blob)
+    const commitment = blobToKzgCommit(blob)
     console.log(commitment)
 })
