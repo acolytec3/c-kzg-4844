@@ -870,7 +870,6 @@ C_KZG_RET blob_to_kzg_commitment(
     Polynomial p;
     g1_t commitment;
     ret = blob_to_polynomial(&p, blob);
-    printf("WE got a polynomial - %u\n", ret);
     if (ret != C_KZG_OK) return ret;
     ret = poly_to_kzg_commitment(&commitment, &p, s);
     if (ret != C_KZG_OK) return ret;

@@ -15,20 +15,25 @@ C_KZG_RET load_trusted_setup_file_from_wasm() {
     return load_trusted_setup_file(s,file);
 }
 
+
+char *byte_to_hex(unsigned char byte) {
+    static char hex_string[3];
+    sprintf(hex_string, "%02x", byte);
+    return hex_string;
+}
+
+char *byte_string_to_hex(const unsigned char *byte_string, size_t length, char *hex_string) {
+    for (size_t i = 0; i < length; i++) {
+        strcat(hex_string, byte_to_hex(byte_string[i]));
+    }
+    return hex_string;
+}
+
 char* blob_to_kzg_commitment_wasm(const Blob *blob) {
     KZGCommitment *commit = malloc(sizeof(KZGCommitment));
-    int ret = blob_to_kzg_commitment(commit, blob, s);
-    printf("Blob converted - %u\n", ret);
-    int i = 0;
-    int j = 0;
-    for(j=i;j<48;j++) {
-        printf("%u", blob->bytes[j]);
-    };
-    printf("\n");
-    // int n = 48;
-    // char * xp = malloc(sizeof(n));
-    // const char xx[]= "0123456789ABCDEF";
-    // while (--n >= 0) xp[n] = xx[(commit->bytes[n>>1] >> ((1 - (n&1)) << 2)) & 0xF];
-    // printf("%s \n", xp);
-    return "hi";
+    blob_to_kzg_commitment(commit, blob, s);
+    char * hex = "";
+    hex = byte_string_to_hex(commit->bytes, 48, hex);
+    return hex;
 };
+
