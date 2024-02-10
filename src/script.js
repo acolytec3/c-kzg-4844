@@ -38,6 +38,10 @@ kzg().then(module => {
     blob[1] = 0x02
     const commitment = blobToKzgCommit(blob)
     console.log(commitment)
+    try {
     const proof = computeBlobKzgProof(blob, Uint8Array.from(Buffer.from(commitment, 'hex')));
     console.log(proof)
+    } catch (err) {
+      console.log(err)
+    }
 })

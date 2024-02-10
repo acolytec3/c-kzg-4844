@@ -41,9 +41,9 @@ char* compute_blob_kzg_proof_wasm(
     const Blob *blob,
     const Bytes48 *commitment_bytes
 ) {
-    KZGProof *proof= malloc(sizeof(KZGProof));
-    compute_blob_kzg_proof(proof, blob, commitment_bytes, s);
+    KZGProof proof;
+    compute_blob_kzg_proof(&proof, blob, commitment_bytes, s);
     char * hex = "";
-    hex = byte_string_to_hex(proof->bytes, sizeof(KZGProof), hex);
+    hex = byte_string_to_hex(proof.bytes, sizeof(KZGProof), hex);
     return hex;
 };
