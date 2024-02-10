@@ -19,6 +19,11 @@ extern "C" {
 C_KZG_RET load_trusted_setup_file_from_wasm();
 
 char* blob_to_kzg_commitment_wasm(const Blob *blob);
+
+char* compute_blob_kzg_proof_wasm(
+    const Blob *blob,
+    const Bytes48 *commitment_bytes
+);
 #ifdef __cplusplus
 }
 #endif

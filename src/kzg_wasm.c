@@ -33,7 +33,17 @@ char* blob_to_kzg_commitment_wasm(const Blob *blob) {
     KZGCommitment *commit = malloc(sizeof(KZGCommitment));
     blob_to_kzg_commitment(commit, blob, s);
     char * hex = "";
-    hex = byte_string_to_hex(commit->bytes, 48, hex);
+    hex = byte_string_to_hex(commit->bytes, sizeof(KZGCommitment), hex);
     return hex;
 };
 
+char* compute_blob_kzg_proof_wasm(
+    const Blob *blob,
+    const Bytes48 *commitment_bytes
+) {
+    KZGProof *proof= malloc(sizeof(KZGProof));
+    compute_blob_kzg_proof(proof, blob, commitment_bytes, s);
+    char * hex = "";
+    hex = byte_string_to_hex(proof->bytes, sizeof(KZGProof), hex);
+    return hex;
+};

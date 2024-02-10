@@ -31,10 +31,13 @@ kzg().then(module => {
 
     const loadTrustedSetup = module.cwrap('load_trusted_setup_file_from_wasm', null,[] )
     const blobToKzgCommit = module.cwrap('blob_to_kzg_commitment_wasm', 'string',['array'] )
+    const computeBlobKzgProof = module.cwrap('compute_blob_kzg_proof_wasm', 'string',['array', 'array'] )
     loadTrustedSetup()
     const blob = new Uint8Array(BYTES_PER_BLOB)
     blob[0] = 0x01
     blob[1] = 0x02
     const commitment = blobToKzgCommit(blob)
     console.log(commitment)
+    const proof = computeBlobKzgProof(blob, Uint8Array.from(Buffer.from(commitment, 'hex')));
+    console.log(proof)
 })
