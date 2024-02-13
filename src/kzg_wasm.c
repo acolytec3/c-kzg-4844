@@ -15,25 +15,20 @@ C_KZG_RET load_trusted_setup_file_from_wasm() {
     return load_trusted_setup_file(s,file);
 }
 
-
-char *byte_to_hex(unsigned char byte) {
-    static char hex_string[3];
-    sprintf(hex_string, "%02x", byte);
-    return hex_string;
-}
-
-char *byte_string_to_hex(const unsigned char *byte_string, size_t length, char *hex_string) {
-    for (size_t i = 0; i < length; i++) {
-        strcat(hex_string, byte_to_hex(byte_string[i]));
-    }
-    return hex_string;
+void btox(char *xp, const char *bb, int n) 
+{
+    int size = n;
+    const char xx[]= "0123456789ABCDEF";
+    while (--n >= 0) xp[n] = xx[(bb[n>>1] >> ((1 - (n&1)) << 2)) & 0xF];
+    xp[size] = 0;
 }
 
 char* blob_to_kzg_commitment_wasm(const Blob *blob) {
     KZGCommitment *commit = malloc(sizeof(KZGCommitment));
     blob_to_kzg_commitment(commit, blob, s);
-    char * hex = "";
-    hex = byte_string_to_hex(commit->bytes, sizeof(KZGCommitment), hex);
+    int size = sizeof commit->bytes << 1;
+    char * hex = malloc(size+1);
+    btox(hex, (const char *)commit->bytes, size);
     return hex;
 };
 
@@ -41,9 +36,10 @@ char* compute_blob_kzg_proof_wasm(
     const Blob *blob,
     const Bytes48 *commitment_bytes
 ) {
-    KZGProof proof;
-    compute_blob_kzg_proof(&proof, blob, commitment_bytes, s);
-    char * hex = "";
-    hex = byte_string_to_hex(proof.bytes, sizeof(KZGProof), hex);
+    KZGProof* proof = malloc(sizeof(KZGProof));
+    compute_blob_kzg_proof(proof, blob, commitment_bytes, s);
+    int size = sizeof proof->bytes << 1;
+    char * hex = malloc(size+1);
+    btox(hex, (const char *)proof->bytes, size);
     return hex;
 };
