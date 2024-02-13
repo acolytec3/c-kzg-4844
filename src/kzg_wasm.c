@@ -53,3 +53,12 @@ int verify_blob_kzg_proof_wasm(
     bool * ok = false;
     return verify_blob_kzg_proof(ok, blob, commitment_bytes, proof_bytes, s);
 };
+
+int verify_kzg_proof_wasm(
+    const Bytes48 *commitment_bytes,
+    const Bytes32 *z_bytes,
+    const Bytes32 *y_bytes,
+    const Bytes48 *proof_bytes) {
+    bool * ok = false;
+    return verify_kzg_proof(ok, commitment_bytes, z_bytes, y_bytes, proof_bytes, s);
+    };
