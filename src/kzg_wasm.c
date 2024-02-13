@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+void btox(char *xp, const char *bb, int n) 
+// Bytes To hex string conversion shamelessly borrowed from here: https://stackoverflow.com/a/53966346
+{
+    int size = n;
+    const char xx[]= "0123456789ABCDEF";
+    while (--n >= 0) xp[n] = xx[(bb[n>>1] >> ((1 - (n&1)) << 2)) & 0xF];
+    xp[size] = 0;
+}
+
 KZGSettings *s;
 
 C_KZG_RET load_trusted_setup_file_from_wasm() {
@@ -13,14 +22,6 @@ C_KZG_RET load_trusted_setup_file_from_wasm() {
     s->g1_values = NULL;
     s->g2_values = NULL;
     return load_trusted_setup_file(s,file);
-}
-
-void btox(char *xp, const char *bb, int n) 
-{
-    int size = n;
-    const char xx[]= "0123456789ABCDEF";
-    while (--n >= 0) xp[n] = xx[(bb[n>>1] >> ((1 - (n&1)) << 2)) & 0xF];
-    xp[size] = 0;
 }
 
 char* blob_to_kzg_commitment_wasm(const Blob *blob) {
@@ -42,4 +43,13 @@ char* compute_blob_kzg_proof_wasm(
     char * hex = malloc(size+1);
     btox(hex, (const char *)proof->bytes, size);
     return hex;
+};
+
+int verify_blob_kzg_proof_wasm(
+    const Blob *blob,
+    const Bytes48 *commitment_bytes,
+    const Bytes48 *proof_bytes
+) {
+    bool * ok = false;
+    return verify_blob_kzg_proof(ok, blob, commitment_bytes, proof_bytes, s);
 };
