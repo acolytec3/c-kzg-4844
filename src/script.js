@@ -30,6 +30,8 @@ function generateRandomBlob() {
 kzg().then(module => {
 
     const loadTrustedSetup = module.cwrap('load_trusted_setup_file_from_wasm', null,[] )
+    const freeTrustedSetup = module.cwrap('free_trusted_setup_wasm', null,[] )
+    const freed = module.cwrap('freed_setup', null,[] )
     const blobToKzgCommit = module.cwrap('blob_to_kzg_commitment_wasm', 'string',['array'] )
     const computeBlobKzgProof = module.cwrap('compute_blob_kzg_proof_wasm', 'string',['array', 'array'] )
     const verifyBlobKzgProof = module.cwrap('verify_blob_kzg_proof_wasm', 'number', ['array', 'array', 'array'])
@@ -62,4 +64,5 @@ kzg().then(module => {
 
     const verifiedKzgProof = verifyKzgProof(precompileData.Commitment, precompileData.z, precompileData.y, precompileData.Proof)
     console.log("Verified kzg proof from points - ", verifiedKzgProof === 0)
+    freeTrustedSetup();
 })

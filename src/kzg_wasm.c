@@ -24,6 +24,10 @@ C_KZG_RET load_trusted_setup_file_from_wasm() {
     return load_trusted_setup_file(s,file);
 }
 
+void free_trusted_setup_wasm() {
+    free_trusted_setup(s);
+};
+
 char* blob_to_kzg_commitment_wasm(const Blob *blob) {
     KZGCommitment *commit = malloc(sizeof(KZGCommitment));
     blob_to_kzg_commitment(commit, blob, s);
