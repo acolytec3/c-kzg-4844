@@ -27,13 +27,13 @@ char* compute_blob_kzg_proof_wasm(
     const Bytes48 *commitment_bytes
 );
 
-int verify_blob_kzg_proof_wasm(
+char * verify_blob_kzg_proof_wasm(
     const Blob *blob,
     const Bytes48 *commitment_bytes,
     const Bytes48 *proof_bytes
 );
 
-int verify_kzg_proof_wasm(
+char * verify_kzg_proof_wasm(
     const Bytes48 *commitment_bytes,
     const Bytes32 *z_bytes,
     const Bytes32 *y_bytes,

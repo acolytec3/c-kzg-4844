@@ -49,20 +49,53 @@ char* compute_blob_kzg_proof_wasm(
     return hex;
 };
 
-int verify_blob_kzg_proof_wasm(
+char * verify_blob_kzg_proof_wasm(
     const Blob *blob,
     const Bytes48 *commitment_bytes,
     const Bytes48 *proof_bytes
 ) {
-    bool * ok = false;
-    return verify_blob_kzg_proof(ok, blob, commitment_bytes, proof_bytes, s);
+    bool ok = true;
+    C_KZG_RET ret = verify_blob_kzg_proof(&ok, blob, commitment_bytes, proof_bytes, s);
+    if (ret != 0) {
+        switch (ret) 
+        {
+            case C_KZG_BADARGS: return "invalid input";
+            break;
+            case C_KZG_MALLOC: return "unable to allocate memory";
+            break;
+            default: return "internal error";
+        };
+    } else {
+        if (ok == 1) {
+            return "true";
+        }
+    }
+    
+    return "false";
 };
 
-int verify_kzg_proof_wasm(
+char * verify_kzg_proof_wasm(
     const Bytes48 *commitment_bytes,
     const Bytes32 *z_bytes,
     const Bytes32 *y_bytes,
     const Bytes48 *proof_bytes) {
-    bool * ok = false;
-    return verify_kzg_proof(ok, commitment_bytes, z_bytes, y_bytes, proof_bytes, s);
+
+    bool ok = true;
+    C_KZG_RET ret = verify_kzg_proof(&ok, commitment_bytes, z_bytes, y_bytes, proof_bytes, s);
+    if (ret != 0) {
+        switch (ret) 
+        {
+            case C_KZG_BADARGS: return "invalid input";
+            break;
+            case C_KZG_MALLOC: return "unable to allocate memory";
+            break;
+            default: return "internal error";
+        };
+    } else {
+        if (ok == 1) {
+            return "true";
+        }
+    }
+    return "false";
+    
     };
