@@ -70,7 +70,6 @@ char * verify_blob_kzg_proof_wasm(
             return "true";
         }
     }
-    
     return "false";
 };
 

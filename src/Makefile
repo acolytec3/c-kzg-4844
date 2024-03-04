@@ -61,7 +61,7 @@ c_kzg_4844.o: c_kzg_4844.c $(BLST_LIBRARY)
 	@$(CC) $(CFLAGS) -c $<
 
 kzg_wasm.o: kzg_wasm.c c_kzg_4844.o 
-	@$(CC) $(CFLAGS) -c $< && emcc ../blst/libblst.a c_kzg_4844.o kzg_wasm.o -o kzg.js -s WASM=1 -O3 -s EXPORTED_FUNCTIONS="['_load_trusted_setup_file_from_wasm','_free_trusted_setup_wasm','_blob_to_kzg_commitment_wasm','_compute_blob_kzg_proof_wasm','_verify_blob_kzg_proof_wasm', '_verify_kzg_proof_wasm']" -s 'EXPORT_NAME="kzg"' -s EXPORTED_RUNTIME_METHODS="['cwrap']" --embed-file ./trusted_setup.txt -s ALLOW_MEMORY_GROWTH -sSTACK_SIZE=1024000 -sMODULARIZE  --closure 1
+	@$(CC) $(CFLAGS) -c $< && emcc ../blst/libblst.a c_kzg_4844.o kzg_wasm.o -o kzg.js -s WASM=1 -O3 -s EXPORTED_FUNCTIONS="['_load_trusted_setup_file_from_wasm','_free_trusted_setup_wasm','_blob_to_kzg_commitment_wasm','_compute_blob_kzg_proof_wasm','_verify_blob_kzg_proof_wasm', '_verify_kzg_proof_wasm']" -s 'EXPORT_NAME="kzg"' -s EXPORTED_RUNTIME_METHODS="['cwrap']" --embed-file ./trusted_setup.txt -s ALLOW_MEMORY_GROWTH -sSTACK_SIZE=1024000 -sMODULARIZE -sEXPORT_ES6 --closure 1
 
 
 test_c_kzg_4844: CFLAGS += -O0
