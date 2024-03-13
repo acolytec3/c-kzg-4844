@@ -30,12 +30,14 @@ function generateRandomBlob() {
 kzg().then(module => {
 
     const loadTrustedSetup = module.cwrap('load_trusted_setup_file_from_wasm', null,[] )
+    const loadTrustedSetupFromBytes = module.cwrap('load_trusted_setup_from_wasm', null,['string', 'number','string', 'number'] )
     const freeTrustedSetup = module.cwrap('free_trusted_setup_wasm', null,[] )
     const blobToKzgCommit = module.cwrap('blob_to_kzg_commitment_wasm', 'string',['array'] )
     const computeBlobKzgProof = module.cwrap('compute_blob_kzg_proof_wasm', 'string',['array', 'array'] )
     const verifyBlobKzgProof = module.cwrap('verify_blob_kzg_proof_wasm', 'string', ['array', 'array', 'array'])
     const verifyKzgProof = module.cwrap('verify_kzg_proof_wasm', 'string', ['array', 'array', 'array','array'])
-    loadTrustedSetup()
+    const trustedSetup = require('./trusted_setup.json')
+    loadTrustedSetupFromBytes(trustedSetup.g1, trustedSetup.bytesPerElement, trustedSetup.g2, trustedSetup.sixtyFive)
     const blob = new Uint8Array(BYTES_PER_BLOB)
     blob[0] = 0x01
     blob[1] = 0x02

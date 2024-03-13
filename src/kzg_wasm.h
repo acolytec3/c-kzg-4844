@@ -18,6 +18,14 @@ extern "C" {
 
 C_KZG_RET load_trusted_setup_file_from_wasm();
 
+C_KZG_RET load_trusted_setup(
+    KZGSettings *out,
+    const uint8_t *g1_bytes,
+    size_t n1,
+    const uint8_t *g2_bytes,
+    size_t n2
+);
+
 void free_trusted_setup_wasm();
 
 char* blob_to_kzg_commitment_wasm(const Blob *blob);

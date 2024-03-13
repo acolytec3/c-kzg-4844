@@ -12,6 +12,25 @@ void btox(char *xp, const char *bb, int n)
     xp[size] = 0;
 }
 
+uint8_t * xtob(char *hex, uint8_t * out, int size)
+{
+    uint8_t bytes[size / 2];
+    int x = 0;
+    int y = 0;
+    char * ptr = hex;
+    while (x < size) {
+       char byte[3];
+       memcpy(byte, ptr, 2);
+       byte[2] = 0;
+       char * temp;
+       bytes[y] = strtol(byte, &temp, 16);
+       x = x + 2;
+       y++;
+       ptr = ptr + 2;
+    }
+    memcpy(out, bytes, size / 2);
+    return out;
+}
 KZGSettings *s;
 
 C_KZG_RET load_trusted_setup_file_from_wasm() {
@@ -22,6 +41,24 @@ C_KZG_RET load_trusted_setup_file_from_wasm() {
     s->g1_values = NULL;
     s->g2_values = NULL;
     return load_trusted_setup_file(s,file);
+}
+
+C_KZG_RET load_trusted_setup_from_wasm(char * g1,
+    size_t n1,
+    char * g2,
+    size_t n2
+    ) {
+    s = malloc(sizeof(KZGSettings));
+    s->max_width = 0;
+    s->roots_of_unity = NULL;
+    s->g1_values = NULL;
+    s->g2_values = NULL;
+    uint8_t * g1_bytes = malloc((strlen(g1) / 2));
+    uint8_t * g2_bytes = malloc((strlen(g2) / 2));
+    xtob(g1, g1_bytes, strlen(g1));
+    xtob(g2, g2_bytes, strlen(g2));
+    C_KZG_RET ok = load_trusted_setup(s, g1_bytes, n1, g2_bytes, n2);
+    return ok;
 }
 
 void free_trusted_setup_wasm() {
