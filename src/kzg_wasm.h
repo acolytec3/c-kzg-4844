@@ -16,8 +16,6 @@
 extern "C" {
 #endif
 
-C_KZG_RET load_trusted_setup_file_from_wasm();
-
 C_KZG_RET load_trusted_setup(
     KZGSettings *out,
     const uint8_t *g1_bytes,
