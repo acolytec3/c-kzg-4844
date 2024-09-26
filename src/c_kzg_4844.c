@@ -869,7 +869,6 @@ C_KZG_RET blob_to_kzg_commitment(
     C_KZG_RET ret;
     Polynomial p;
     g1_t commitment;
-
     ret = blob_to_polynomial(&p, blob);
     if (ret != C_KZG_OK) return ret;
     ret = poly_to_kzg_commitment(&commitment, &p, s);
@@ -1681,12 +1680,10 @@ C_KZG_RET load_trusted_setup(
     size_t n2
 ) {
     C_KZG_RET ret;
-
     out->max_width = 0;
     out->roots_of_unity = NULL;
     out->g1_values = NULL;
     out->g2_values = NULL;
-
     /* Sanity check in case this is called directly */
     CHECK(n1 == TRUSTED_SETUP_NUM_G1_POINTS);
     CHECK(n2 == TRUSTED_SETUP_NUM_G2_POINTS);
@@ -1702,11 +1699,11 @@ C_KZG_RET load_trusted_setup(
     /* Allocate all of our arrays */
     ret = new_fr_array(&out->roots_of_unity, out->max_width);
     if (ret != C_KZG_OK) goto out_error;
+
     ret = new_g1_array(&out->g1_values, n1);
     if (ret != C_KZG_OK) goto out_error;
     ret = new_g2_array(&out->g2_values, n2);
     if (ret != C_KZG_OK) goto out_error;
-
     /* Convert all g1 bytes to g1 points */
     for (uint64_t i = 0; i < n1; i++) {
         blst_p1_affine g1_affine;
@@ -1736,13 +1733,11 @@ C_KZG_RET load_trusted_setup(
     /* Make sure the trusted setup was loaded in Lagrange form */
     ret = is_trusted_setup_in_lagrange_form(out, n1, n2);
     if (ret != C_KZG_OK) goto out_error;
-
     /* Compute roots of unity and permute the G1 trusted setup */
     ret = compute_roots_of_unity(out->roots_of_unity, max_scale);
     if (ret != C_KZG_OK) goto out_error;
     ret = bit_reversal_permutation(out->g1_values, sizeof(g1_t), n1);
     if (ret != C_KZG_OK) goto out_error;
-
     goto out_success;
 
 out_error:
@@ -1805,3 +1800,4 @@ C_KZG_RET load_trusted_setup_file(KZGSettings *out, FILE *in) {
         TRUSTED_SETUP_NUM_G2_POINTS
     );
 }
+
